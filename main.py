@@ -10,9 +10,9 @@ from helpers import prepare_reference_image, check_job_status, show_loading_anim
 
 # AWS Configuration
 AWS_REGION = "us-east-1"
-OUTPUT_S3_BUCKET = "aws-summit-nova-reel"
+OUTPUT_S3_BUCKET = "aws-summit-nova-reel-2"
 OUTPUT_S3_PREFIX = "nova-reel-output/"
-CATALOG_BUCKET = "aws-summit-product-catalog"
+CATALOG_BUCKET = "aws-summit-product-catalog-2"
 MODEL_ID = "amazon.nova-reel-v1:1"
 
 # Product Categories
@@ -127,7 +127,7 @@ def create_video_from_prompt():
             }
             output_config = {
                 "s3OutputDataConfig": {
-                    "s3Uri": f"s3://{OUTPUTS3_BUCKET}/{OUTPUT_S3_PREFIX}"
+                    "s3Uri": f"s3://{OUTPUT_S3_BUCKET}/{OUTPUT_S3_PREFIX}"
                 }
             }
             with st.spinner("🎥 Creating your video..."):
