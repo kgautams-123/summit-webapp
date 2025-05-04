@@ -10,15 +10,15 @@ from helpers import prepare_reference_image, check_job_status, show_loading_anim
 
 # AWS Configuration
 AWS_REGION = "us-east-1"
-OUTPUT_S3_BUCKET = "aws-summit-nova-reel-2"
+OUTPUT_S3_BUCKET = "aws-summit-nova-reel"
 OUTPUT_S3_PREFIX = "nova-reel-output/"
-CATALOG_BUCKET = "aws-summit-product-catalog-2"
+CATALOG_BUCKET = "aws-summit-product-catalog"
 MODEL_ID = "amazon.nova-reel-v1:1"
 
 # Product Categories
 PRODUCT_CATEGORIES = {
     "Food & Beverages": "products/food/",
-    "Electronics": "products/electronics/",
+    "Nature": "products/nature/",
     "Home & Living": "products/home-living/"
 }
 
@@ -76,6 +76,8 @@ def create_video(key_suffix=""):
             if s3_uri:
                 presigned_url = aws_manager.generate_presigned_url(s3_uri)
                 st.video(presigned_url)
+                # Display the presigned URL as a hyperlink
+                st.markdown(f"**Video URL:** [Click to open in browser]({presigned_url})", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
                 with col1:
                     video_content = requests.get(presigned_url).content
@@ -140,6 +142,8 @@ def create_video_from_prompt():
             if s3_uri:
                 presigned_url = aws_manager.generate_presigned_url(s3_uri)
                 st.video(presigned_url)
+                # Add this line to display the presigned URL as a hyperlink
+                st.markdown(f"**Presigned URL:** [Click to open video in new tab]({presigned_url})", unsafe_allow_html=True)
                 col1, col2 = st.columns(2)
                 with col1:
                     video_content = requests.get(presigned_url).content
@@ -243,7 +247,7 @@ tab1, tab2, tab3 = st.tabs(["📑 Product Catalog", "⬆️ Custom Upload", "✏
 with tab1:
     col1, col2 = st.columns([0.4, 0.6])
     with col1:
-        st.markdown("### Select Product")
+        st.markdown("### Select Image")
         selected_category = st.selectbox(
             "Product Category",
             options=list(PRODUCT_CATEGORIES.keys()),
@@ -256,7 +260,7 @@ with tab1:
         if not products:
             st.warning(f"No products found in {selected_category} category.")
         else:
-            st.markdown("#### Available Products")
+            st.markdown("#### Available Images")
             # If a product is selected, show only that product
             if st.session_state.selected_image and st.session_state.current_product_key:
                 selected_product = next((p for p in products if p['key'] == st.session_state.current_product_key), None)
@@ -340,6 +344,6 @@ with tab3:
 # Footer
 st.markdown("""
     <div style='text-align: center; padding: 2rem 0; color: var(--text-secondary); margin-top: 2rem;'>
-        <p style='margin-bottom: 0.5rem;'>Created with ❤️ using Amazon Bedrock and Nova Reel 1.1</p>
+        <p style='margin-bottom: 0.5rem;'>Created using Amazon Bedrock and Nova Reel 1.1</p>
     </div>
 """, unsafe_allow_html=True)
